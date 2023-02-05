@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	bFlag     bool
-	bAlphaNum bool
+	bFlag bool
+	bSep  bool
 )
 
 func isEmpty(str string) bool {
@@ -27,11 +27,11 @@ func isEmpty(str string) bool {
 func isPipeSep(str string) bool {
 	result := regexp.MustCompile(`[^0-9](?:[^\\|]|\\[\s\S])+`).MatchString(str)
 	if result {
-		bAlphaNum = true
+		bSep = true
 	} else {
-		bAlphaNum = false
+		bSep = false
 	}
-	return bAlphaNum
+	return bSep
 }
 
 func main() {
