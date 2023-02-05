@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"regexp"
 	"strings"
-	"unicode"
 )
 
 var (
-	bFlag  bool
-	bDigit bool
+	bFlag     bool
+	bAlphaNum bool
 )
 
 func isEmpty(str string) bool {
@@ -24,17 +24,16 @@ func isEmpty(str string) bool {
 	return bFlag
 }
 
-func isNum(str string) bool {
-	for _, ch := range str {
-		if unicode.IsNumber(ch) {
-			fmt.Println(string(ch), "is a number.")
-			bDigit = true
-		} else {
-			//is not a number rune
-			bDigit = false
-		}
+func isPipeSep(str string) bool {
+	result := regexp.MustCompile(`[^0-9](?:[^\\|]|\\[\s\S])+`).MatchString(str)
+	if result {
+		// is an alphanumeric
+		bAlphaNum = true
+	} else {
+		//is not an alphanumeric
+		bAlphaNum = false
 	}
-	return bDigit
+	return bAlphaNum
 }
 
 func main() {
@@ -55,14 +54,16 @@ func main() {
 		//get string typed in the standard input
 		input = scanner.Text()
 
-		outEmpty := isEmpty(input)
-		if outEmpty {
+		output := isEmpty(input)
+		if output {
 			fmt.Println("The value you enter isn't valid! Please, enter a valid command!")
 		}
 
-		outDigit := isNum(input)
-		if outDigit {
-			fmt.Println("The value you enter isn't valid! Please, enter a valid command!")
+		output = isPipeSep(input)
+		if output {
+
+			//TODO
+
 		}
 
 		if input == "Q" || input == "q" {
