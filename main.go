@@ -27,10 +27,8 @@ func isEmpty(str string) bool {
 func isPipeSep(str string) bool {
 	result := regexp.MustCompile(`[^0-9](?:[^\\|]|\\[\s\S])+`).MatchString(str)
 	if result {
-		// is an alphanumeric
 		bAlphaNum = true
 	} else {
-		//is not an alphanumeric
 		bAlphaNum = false
 	}
 	return bAlphaNum
