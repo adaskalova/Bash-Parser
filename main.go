@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"path"
 	"regexp"
 	"strings"
@@ -68,8 +69,23 @@ func main() {
 
 		output = isPipeSep(input)
 		if output {
+
+			input = strings.ReplaceAll(input, "'", ".")
+
 			coloredTxt := changeColor(input)
 			fmt.Println("cmd: " + coloredTxt)
+
+			cmd := exec.Command(input)
+
+			out, err := cmd.Output()
+
+			if err != nil {
+				panic(err)
+			}
+
+			tmp := string(out)
+			tmp = changeColor(tmp)
+			fmt.Println("Output:" + string(tmp))
 			//TODO
 
 		}
