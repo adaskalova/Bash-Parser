@@ -9,10 +9,19 @@ import (
 	"strings"
 )
 
+const (
+	colPurple = "\033[35m"
+	colNone   = "\033[0m"
+)
+
 var (
 	bFlag bool
 	bSep  bool
 )
+
+func changeColor(s string) string {
+	return colPurple + s + colNone
+}
 
 func isEmpty(str string) bool {
 	if strings.TrimSpace(str) == "" {
@@ -59,7 +68,8 @@ func main() {
 
 		output = isPipeSep(input)
 		if output {
-
+			coloredTxt := changeColor(input)
+			fmt.Println("cmd: " + coloredTxt)
 			//TODO
 
 		}
