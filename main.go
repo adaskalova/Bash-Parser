@@ -56,19 +56,19 @@ func isPipeSep(str string) bool {
 func isPathExists(path string) bool {
 	match := regexp.MustCompile(`^\/[a-zA-Z]+`).MatchString(path)
 	tmpMatch := regexp.MustCompile(`\/`).MatchString(path)
+	status := false
 	if match || tmpMatch {
-		return true
-	} else {
-		return false
+		status = true
 	}
+	return status
 }
 
 func changeDir(str string) {
 	words := strings.Fields(str)
 	wordsLen := len(words)
 	if wordsLen > 1 {
-		tmp_words := words[1:]
-		for _, item := range tmp_words {
+		tmpWords := words[1:]
+		for _, item := range tmpWords {
 			bPath := isPathExists(item)
 			if bPath {
 				cwd, err := os.Getwd()
