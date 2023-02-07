@@ -3,9 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"path"
+	"path/filepath"
 	"regexp"
 	"strings"
 )
@@ -16,8 +18,10 @@ const (
 )
 
 var (
-	bFlag bool
-	bSep  bool
+	bFlag      bool
+	bSep       bool
+	bHasPrefix bool
+	bPath      bool
 )
 
 func changeColor(s string) string {
@@ -42,6 +46,40 @@ func isPipeSep(str string) bool {
 		bSep = false
 	}
 	return bSep
+}
+
+func isPathExists(path string) bool {
+	match := regexp.MustCompile(`^\/[a-zA-Z]+`).MatchString(path)
+	tmpMatch := regexp.MustCompile(`\/`).MatchString(path)
+	if match || tmpMatch {
+		return true
+	} else {
+		return false
+	}
+}
+
+func changeDir(str string) {
+	words := strings.Fields(str)
+	for _, item := range words {
+		bPath := isPathExists(item)
+		// if err != nil {
+		// 	log.Printf("error: %v\n", err)
+		// }
+		if bPath {
+			fmt.Println(filepath.Abs(item))
+			cwd, _ := os.Getwd()
+			err := os.Chdir(filepath.Join("", item))
+			cwd, _ = os.Getwd()
+			fmt.Println("cwd:", cwd)
+			if err != nil {
+				log.Printf("error: %v\n", err)
+			}
+		} else {
+			str := "Enter a valid path!"
+			coloredTxt := changeColor(str)
+			fmt.Println(coloredTxt)
+		}
+	}
 }
 
 func main() {
@@ -71,21 +109,21 @@ func main() {
 		if output {
 
 			input = strings.ReplaceAll(input, "'", ".")
+			bHasPrefix = strings.HasPrefix(input, "cd")
 
-			coloredTxt := changeColor(input)
-			fmt.Println("cmd: " + coloredTxt)
+			if bHasPrefix {
+				changeDir(input)
+			}
 
 			cmd := exec.Command(input)
-
 			out, err := cmd.Output()
-
 			if err != nil {
 				panic(err)
 			}
-
 			tmp := string(out)
 			tmp = changeColor(tmp)
 			fmt.Println("Output:" + string(tmp))
+
 			//TODO
 
 		}
