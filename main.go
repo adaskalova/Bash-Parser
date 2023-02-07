@@ -60,25 +60,28 @@ func isPathExists(path string) bool {
 
 func changeDir(str string) {
 	words := strings.Fields(str)
-	for _, item := range words {
-		bPath := isPathExists(item)
-		// if err != nil {
-		// 	log.Printf("error: %v\n", err)
-		// }
-		if bPath {
-			fmt.Println(filepath.Abs(item))
-			cwd, _ := os.Getwd()
-			err := os.Chdir(filepath.Join("", item))
-			cwd, _ = os.Getwd()
-			fmt.Println("cwd:", cwd)
-			if err != nil {
-				log.Printf("error: %v\n", err)
+	wordsLen := len(words)
+	if wordsLen > 1 {
+		tmp_words := words[1:]
+		for _, item := range tmp_words {
+			bPath := isPathExists(item)
+			if bPath {
+				cwd, err := os.Getwd()
+				if err != nil {
+					fmt.Printf("err: %T, %v\n", err, err)
+				}
+				err = os.Chdir(filepath.Join("", item))
+				cwd, _ = os.Getwd()
+				fmt.Println("cwd:", cwd)
+				if err != nil {
+					log.Printf("error: %v\n", err)
+				}
 			}
-		} else {
-			str := "Enter a valid path!"
-			coloredTxt := changeColor(str)
-			fmt.Println(coloredTxt)
 		}
+	} else {
+		str := "The value you enter isn't valid! Please, enter a valid command!"
+		coloredTxt := changeColor(str)
+		fmt.Println(coloredTxt)
 	}
 }
 
@@ -113,6 +116,10 @@ func main() {
 
 			if bHasPrefix {
 				changeDir(input)
+			} else {
+				str := "The value you enter isn't valid! Please, enter a valid command!"
+				coloredTxt := changeColor(str)
+				fmt.Println(coloredTxt)
 			}
 
 			cmd := exec.Command(input)
