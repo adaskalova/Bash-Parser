@@ -29,6 +29,7 @@ var (
 func changeColor(s string) string {
 	return colPurple + s + colNone
 }
+
 func changeColRed(s string) string {
 	return colRed + s
 }
@@ -43,14 +44,9 @@ func isEmpty(str string) bool {
 	return bFlag
 }
 
-func isPipeSep(str string) bool {
-	result := regexp.MustCompile(`[^0-9](?:[^\\|]|\\[\s\S])+`).MatchString(str)
-	if result {
-		bSep = true
-	} else {
-		bSep = false
-	}
-	return bSep
+func isPipeEscaped(str string) bool {
+	result := regexp.MustCompile(`(?:[^\\|]|\\[\s\S])+`).MatchString(str)
+	return result
 }
 
 func isPathExists(path string) bool {
@@ -125,14 +121,18 @@ func executeCmd(inputCmd string) error {
 
 func readOutput(reader io.Reader, prefix string) {
 	rdr := bufio.NewReader(reader)
-	result := ""
+	// result := ""
 	bs := []byte{}
-	for bs != nil {
+	for {
 		bs, _, _ = rdr.ReadLine()
-		result = string(bs)
-		coloredTxt := changeColor(result)
-		fmt.Println(prefix + coloredTxt)
-		if bs == nil {
+		// result = string(bs)
+		// coloredTxt := changeColor(result)
+		// fmt.Println(prefix + coloredTxt)
+		if bs != nil {
+			outStr := string(bs)
+			coloredTxt := changeColor(outStr)
+			fmt.Println(prefix + coloredTxt)
+		} else {
 			break
 		}
 	}
@@ -162,7 +162,8 @@ func main() {
 			fmt.Println("The value you enter isn't valid! Please, enter a valid command!")
 		}
 
-		output = isPipeSep(input)
+		output = isPipeEscaped(input)
+		fmt.Println(output)
 		if output {
 
 			input = strings.ReplaceAll(input, "'", ".")
