@@ -64,7 +64,7 @@ func changeDir(str string) {
 			if bPath {
 				cwd, err := os.Getwd()
 				if err != nil {
-					fmt.Printf("err: %T, %v\n", err, err)
+					fmt.Printf("error: %T, %v\n", err, err)
 				}
 				err = os.Chdir(filepath.Join("", item))
 				cwd, _ = os.Getwd()
@@ -120,9 +120,6 @@ func readOutput(reader io.Reader, prefix string) {
 	bs := []byte{}
 	for {
 		bs, _, _ = rdr.ReadLine()
-		// result = string(bs)
-		// coloredTxt := changeColor(result)
-		// fmt.Println(prefix + coloredTxt)
 		if bs != nil {
 			outStr := string(bs)
 			coloredTxt := changeColor(outStr)
@@ -158,7 +155,6 @@ func main() {
 		}
 
 		output = isPipeEscaped(input)
-		fmt.Println(output)
 		if output {
 
 			input = strings.ReplaceAll(input, "'", ".")
