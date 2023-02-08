@@ -50,13 +50,8 @@ func isPipeEscaped(str string) bool {
 }
 
 func isPathExists(path string) bool {
-	match := regexp.MustCompile(`^\/[a-zA-Z]+`).MatchString(path)
-	tmpMatch := regexp.MustCompile(`\/`).MatchString(path)
-	status := false
-	if match || tmpMatch {
-		status = true
-	}
-	return status
+	result := regexp.MustCompile(`[\/]`).MatchString(path)
+	return result
 }
 
 func changeDir(str string) {
