@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"os/exec"
 	"path"
@@ -14,16 +13,19 @@ import (
 )
 
 const (
-	colPurple = "\033[35m"
-	colNone   = "\033[0m"
-	colRed    = "\033[0;31m"
+	colPurple       = "\033[35m"
+	colNone         = "\033[0m"
+	colRed          = "\033[0;31m"
+	pipeEscaped     = `(?:[^\\|]|\\[\s\S])+`
+	pathExists      = `[\/]`
+	matchWhiteSpace = `[\/]\s+`
 )
 
 var (
 	bFlag      bool
-	bSep       bool
 	bHasPrefix bool
 	bPath      bool
+	bSpace     bool
 )
 
 func changeColor(s string) string {
@@ -45,55 +47,60 @@ func isEmpty(str string) bool {
 }
 
 func isPipeEscaped(str string) bool {
-	result := regexp.MustCompile(`(?:[^\\|]|\\[\s\S])+`).MatchString(str)
+	result := regexp.MustCompile(pipeEscaped).MatchString(str)
 	return result
 }
 
 func isPathExists(path string) bool {
-	result := regexp.MustCompile(`[\/]`).MatchString(path)
+	result := regexp.MustCompile(pathExists).MatchString(path)
+	return result
+}
+func isMatchisMatchWhiteSp(str string) bool {
+	result := regexp.MustCompile(matchWhiteSpace).MatchString(str)
 	return result
 }
 
-func changeDir(str string) {
+func changeDir(str string) (msg string) {
+	bSpace = isMatchisMatchWhiteSp(str)
+	if bSpace {
+		return
+	}
 	words := strings.Fields(str)
 	wordsLen := len(words)
+	var tmpMsg string
 	if wordsLen > 1 {
 		tmpWords := words[1:]
 		for _, item := range tmpWords {
 			bPath := isPathExists(item)
 			if bPath {
-				cwd, err := os.Getwd()
+				err := os.Chdir(filepath.Join("", item))
+				//os.Getwd(): return (dir string, err error)
+				//	string:   current directory
+				//	error:    if any
+				tmpMsg, err = os.Getwd()
+				fmt.Println("tmpMsg:", tmpMsg)
 				if err != nil {
-					fmt.Printf("error: %T, %v\n", err, err)
-				}
-				err = os.Chdir(filepath.Join("", item))
-				cwd, _ = os.Getwd()
-				fmt.Println("cwd:", cwd)
-				if err != nil {
-					log.Printf("error: %v\n", err)
+					panic(err)
 				}
 			}
 		}
-	} else {
-		str := "The value you enter isn't valid! Please, enter a valid command!"
-		coloredTxt := changeColor(str)
-		fmt.Println(coloredTxt)
 	}
+	return tmpMsg
 }
 
-func executeCmd(inputCmd string) error {
+func executeCmd(inputCmd string) (s string, err error) {
 
 	cmd := exec.Command("bash", "-c", inputCmd)
 
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		fmt.Fprintln(os.Stderr)
-		return err
+		return
 	}
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
 		fmt.Fprintln(os.Stderr)
-		return err
+		return
 	}
 
 	coloredTxt := changeColRed("Error: ")
@@ -109,9 +116,11 @@ func executeCmd(inputCmd string) error {
 
 	//waiting for command to finish
 	err = cmd.Wait()
-	log.Printf("Completed successfully...")
+	if err != nil {
+		fmt.Println(".....")
+	}
 
-	return nil
+	return "", nil
 }
 
 func readOutput(reader io.Reader, prefix string) {
@@ -161,7 +170,14 @@ func main() {
 			bHasPrefix = strings.HasPrefix(input, "cd")
 
 			if bHasPrefix {
-				changeDir(input)
+				msg := changeDir(input)
+				tmp := isEmpty(msg)
+				if !tmp {
+					coloredMsg := changeColor(msg)
+					fmt.Println("Curren working directory:", coloredMsg)
+				} else {
+					fmt.Println("The value you enter isn't valid! Please, enter a valid command!")
+				}
 			}
 			executeCmd(input)
 		}
