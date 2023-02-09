@@ -55,13 +55,13 @@ func isPathExists(path string) bool {
 	result := regexp.MustCompile(pathExists).MatchString(path)
 	return result
 }
-func isMatchisMatchWhiteSp(str string) bool {
+func isMatchWhiteSp(str string) bool {
 	result := regexp.MustCompile(matchWhiteSpace).MatchString(str)
 	return result
 }
 
 func changeDir(str string) (msg string) {
-	bSpace = isMatchisMatchWhiteSp(str)
+	bSpace = isMatchWhiteSp(str)
 	if bSpace {
 		return
 	}
