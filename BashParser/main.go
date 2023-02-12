@@ -7,14 +7,18 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
 )
 
 const (
-	colPurple = "\033[35m"
-	colNone   = "\033[0m"
-	colRed    = "\033[0;31m"
+	colPurple       = "\033[35m"
+	colNone         = "\033[0m"
+	colRed          = "\033[0;31m"
+	pathExists      = `[\/]`
+	matchWhiteSpace = `[\/]\s+`
 )
 
 func changeColor(s string) string {
@@ -24,6 +28,8 @@ func changeColor(s string) string {
 var (
 	cmtOutput string
 	fInfo     bool
+	bSpace    bool
+	bFlag     bool
 )
 
 func readOutput(reader io.Reader, prefix string) {
@@ -53,6 +59,52 @@ func run(path string, arg string) (result string) {
 	return string(output)
 
 }
+func isPathExists(path string) bool {
+	result := regexp.MustCompile(pathExists).MatchString(path)
+	return result
+}
+
+func isMatchWhiteSpace(str string) bool {
+	result := regexp.MustCompile(matchWhiteSpace).MatchString(str)
+	return result
+}
+
+func changeDir(str string) (msg string) {
+	bSpace = isMatchWhiteSpace(str)
+	if bSpace {
+		return
+	}
+	words := strings.Fields(str)
+	wordsLen := len(words)
+	var tmpMsg string
+	if wordsLen > 1 {
+		tmpWords := words[1:]
+		for _, item := range tmpWords {
+			bPath := isPathExists(item)
+			if bPath {
+				err := os.Chdir(filepath.Join("", item))
+				//os.Getwd(): return (dir string, err error)
+				//	string:   current directory
+				//	error:    if any
+				tmpMsg, err = os.Getwd()
+				if err != nil {
+					panic(err)
+				}
+			}
+		}
+	}
+	return tmpMsg
+}
+
+func isEmpty(str string) bool {
+	if strings.TrimSpace(str) == "" {
+		// if string is empty
+		bFlag = true
+	} else {
+		bFlag = false
+	}
+	return bFlag
+}
 
 func selectCmd(cmd string) {
 	baseTmp := isContainStr(cmd, "base64")
@@ -69,6 +121,15 @@ func selectCmd(cmd string) {
 		cmtOutput = run("commands/cmd_mv/mv", cmd)
 	case strings.HasPrefix(cmd, "ls"):
 		cmtOutput = run("commands/cmd_ls/ls", cmd)
+	case strings.HasPrefix(cmd, "cd"):
+		cmtOutput = changeDir(cmd)
+		tmp := isEmpty(cmtOutput)
+		if !tmp {
+			coloredMsg := changeColor(cmtOutput)
+			fmt.Println("Curren working directory:", coloredMsg)
+		} else {
+			fmt.Println("The value you enter isn't valid! Please, enter a valid command!")
+		}
 	case baseTmp:
 		cmtOutput = run("commands/cmd_base64/encode", cmd)
 		//create temp file
