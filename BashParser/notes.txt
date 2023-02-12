@@ -52,3 +52,10 @@ go run main.go -cmd "cd /"
 go run main.go -cmd "cd /tmp"
 
 ---------------------
+
+---------- TEST tail ---------------------------
+tail file   - display only the last 10 lines of the file
+
+go run main.go -cmd "tail commands/test_files/misc.txt"
+
+---------------------

@@ -7,3 +7,9 @@ Samsung
 Lenovo
 Dell
 LG
+Windows
+Apple
+LiMux
+Alpine Linux
+MkLinux
+Tizen

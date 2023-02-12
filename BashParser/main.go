@@ -121,6 +121,8 @@ func selectCmd(cmd string) {
 		cmtOutput = run("commands/cmd_mv/mv", cmd)
 	case strings.HasPrefix(cmd, "ls"):
 		cmtOutput = run("commands/cmd_ls/ls", cmd)
+	case strings.HasPrefix(cmd, "tail"):
+		cmtOutput = run("commands/cmd_tail/tail", cmd)
 	case strings.HasPrefix(cmd, "cd"):
 		cmtOutput = changeDir(cmd)
 		tmp := isEmpty(cmtOutput)
