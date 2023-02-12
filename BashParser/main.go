@@ -67,6 +67,8 @@ func selectCmd(cmd string) {
 		cmtOutput = run("commands/cmd_grep/grep", cmd)
 	case strings.HasPrefix(cmd, "mv"):
 		cmtOutput = run("commands/cmd_mv/mv", cmd)
+	case strings.HasPrefix(cmd, "ls"):
+		cmtOutput = run("commands/cmd_ls/ls", cmd)
 	case baseTmp:
 		cmtOutput = run("commands/cmd_base64/encode", cmd)
 		//create temp file

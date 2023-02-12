@@ -36,3 +36,11 @@ go run main.go -cmd "mv commands/test_files/misc.txt commands/test_files/test"
 go run main.go -cmd "mv commands/test_files/test/misc.txt commands/test_files"
 
 ---------------------
+
+---------- TEST ls ---------------------------
+ls dir
+
+go run main.go -cmd "ls commands/test_files"
+go run main.go -cmd "ls -la commands/test_files"
+
+---------------------
