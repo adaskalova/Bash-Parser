@@ -19,3 +19,5 @@ go run main.go -cmd "grep an commands/test_files/*.*"
 go run main.go -cmd "grep Apple's commands/test_files/*.*" 
 
 ---------------------
+
+go run main.go -cmd "cat commands/test_files/misc.txt | base64 | base64 --decode"
