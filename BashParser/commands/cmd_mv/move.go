@@ -76,7 +76,7 @@ func readOutput(reader io.Reader, prefix string) {
 func main() {
 
 	args := os.Args
-	input := args[2]
+	input := args[1]
 
 	out, err := executeCmd(input)
 	if out == "" {

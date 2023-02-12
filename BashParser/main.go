@@ -44,6 +44,7 @@ func readOutput(reader io.Reader, prefix string) {
 func run(path string, arg string) (result string) {
 
 	exe, _ := exec.LookPath(path)
+
 	output, err := exec.Command(exe, arg).Output()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -64,6 +65,8 @@ func selectCmd(cmd string) {
 		cmtOutput = run("commands/cmd_sort/sort", cmd)
 	case strings.HasPrefix(cmd, "grep"):
 		cmtOutput = run("commands/cmd_grep/grep", cmd)
+	case strings.HasPrefix(cmd, "mv"):
+		cmtOutput = run("commands/cmd_mv/mv", cmd)
 	case baseTmp:
 		cmtOutput = run("commands/cmd_base64/encode", cmd)
 		//create temp file
@@ -92,8 +95,6 @@ func selectCmd(cmd string) {
 		}
 	case strings.HasPrefix(cmd, "rm"):
 		cmtOutput = run("commands/cmd_rm/rm", cmd)
-	case strings.HasPrefix(cmd, "mv"):
-		cmtOutput = run("commands/cmd_mv/mv", cmd)
 	default:
 		fmt.Println("The guess is wrong!")
 	}
