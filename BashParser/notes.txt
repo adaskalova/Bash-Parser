@@ -1,0 +1,21 @@
+
+
+ go run main.go    ->  Command Used:  cat commands/default/default.txt
+ 
+ 
+---------- TEST cat ---------------------------
+cat  filename
+
+go run main.go -cmd "cat commands/test_files/misc.txt" 
+go run main.go -cmd "cat commands/test_files/computer.txt"
+
+---------------------
+
+---------- TEST grep ---------------------------
+grep pattern file[s]
+
+go run main.go -cmd "grep Apple's commands/test_files/wiki_apple.txt"
+go run main.go -cmd "grep an commands/test_files/*.*"  
+go run main.go -cmd "grep Apple's commands/test_files/*.*" 
+
+---------------------
