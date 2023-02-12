@@ -21,3 +21,18 @@ go run main.go -cmd "grep Apple's commands/test_files/*.*"
 ---------------------
 
 go run main.go -cmd "cat commands/test_files/misc.txt | base64 | base64 --decode"
+
+---------- TEST rm ---------------------------
+rm file
+
+go run main.go -cmd  "rm commands/test_files/test/rm_file.txt"
+
+---------------------
+
+---------- TEST mv ---------------------------
+mv source_file target_directory
+
+go run main.go -cmd "mv commands/test_files/misc.txt commands/test_files/test"
+go run main.go -cmd "mv commands/test_files/test/misc.txt commands/test_files"
+
+---------------------
