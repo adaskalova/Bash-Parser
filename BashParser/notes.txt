@@ -44,3 +44,11 @@ go run main.go -cmd "ls commands/test_files"
 go run main.go -cmd "ls -la commands/test_files"
 
 ---------------------
+
+---------- TEST cd ---------------------------
+cd dir
+
+go run main.go -cmd "cd /"
+go run main.go -cmd "cd /tmp"
+
+---------------------
