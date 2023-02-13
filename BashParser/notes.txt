@@ -20,8 +20,6 @@ go run main.go -cmd "grep Apple's commands/test_files/*.*"
 
 ---------------------
 
-go run main.go -cmd "cat commands/test_files/misc.txt | base64 | base64 --decode"
-
 ---------- TEST rm ---------------------------
 rm file
 
@@ -59,3 +57,15 @@ tail file   - display only the last 10 lines of the file
 go run main.go -cmd "tail commands/test_files/misc.txt"
 
 ---------------------
+
+---------- TEST sort ---------------------------
+sort file 
+
+go run main.go -cmd  "sort commands/test_files/misc.txt"
+
+---------------------
+
+
+
+go run main.go -cmd "cat commands/test_files/misc.txt | base64 | base64 --decode"
+go run main.go -cmd "cat commands/test_files/misc.txt|sort"

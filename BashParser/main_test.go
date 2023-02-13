@@ -5,7 +5,6 @@ import (
 )
 
 var path = "commands/test_files/test/rm_file.txt"
-var changePath = "cd /tmp"
 
 func BenchmarkIsPathExists(b *testing.B) {
 	for i := 0; i < b.N; i++ {
@@ -14,7 +13,19 @@ func BenchmarkIsPathExists(b *testing.B) {
 }
 
 func BenchmarkChangeDir(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		changeDir(changePath)
+	benchmarks := []struct {
+		name       string
+		changePath string
+	}{
+		{"Path_root:", "/"},
+		{"Path_tmp:", "/tmp"},
+		//{"Path_random:", "<path>/<to>/<the>/<specific>/<directory>"},
+	}
+	for _, bm := range benchmarks {
+		b.Run(bm.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				changeDir(bm.changePath)
+			}
+		})
 	}
 }
