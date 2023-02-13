@@ -109,7 +109,6 @@ func isEmpty(str string) bool {
 func selectCmd(cmd string) {
 	baseTmp := isContainStr(cmd, "base64")
 	baseDecode := isContainStr(cmd, "base64 --decode")
-
 	switch {
 	case strings.HasPrefix(cmd, "cat"):
 		cmtOutput = run("commands/cmd_cat/cat", cmd)
@@ -196,17 +195,25 @@ func constructCommand(sl string, m map[int]string) string {
 	//find the length of map
 	var result int = len(m)
 	words := strings.Fields(sl)
-
 	outDashes := isContainStr(sl, "--")
-	outSlacshes := isContainStr(sl, "/")
+	outSlashes := isContainStr(sl, "/")
+	outDot := isContainStr(sl, ".")
 
 	if len(words) > 1 && outDashes {
 		return sl + " " + "log.txt"
 	} else if (len(words) == 1) && (result == 1) {
 		output := sl + " " + m[0]
 		return output
-	} else if len(words) > 1 && outSlacshes {
+	} else if len(words) > 1 && outSlashes {
 		return sl
+
+	} else if len(words) > 1 && outDot {
+		output := sl + " " + m[0]
+		return output
+
+	} else if len(words) == 2 {
+		output := sl + " " + m[0]
+		return output
 
 	}
 	return ""

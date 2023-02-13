@@ -66,6 +66,6 @@ go run main.go -cmd  "sort commands/test_files/misc.txt"
 ---------------------
 
 
-
 go run main.go -cmd "cat commands/test_files/misc.txt | base64 | base64 --decode"
 go run main.go -cmd "cat commands/test_files/misc.txt|sort"
+go run main.go -cmd "cat commands/test_files/misc.txt | sort | grep nux | tail"
