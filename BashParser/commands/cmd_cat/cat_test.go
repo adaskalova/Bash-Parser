@@ -62,7 +62,7 @@ func TestExecuteCmd(t *testing.T) {
 		expected string
 	}{
 		{desc: "ExecuteCmd cat:", input: "cat ../../commands/test_files/computer.txt", expected: ""},
-		{desc: "ExecuteCmd:", input: "cat commands/test_files/computer.txt", expected: ""},
+		{desc: "ExecuteCmd:", input: "cat commands/test_files/computer.txt", expected: "The value you enter isn't valid! Please, enter a valid command!"},
 	}
 
 	for _, tc := range tests {

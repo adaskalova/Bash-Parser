@@ -66,7 +66,6 @@ func readOutput(reader io.Reader, prefix string) (string, error) {
 			outStr := string(bs)
 			coloredTxt := changeColor(outStr)
 			fmt.Println(prefix + coloredTxt)
-			return "", nil
 		} else {
 			break
 		}
