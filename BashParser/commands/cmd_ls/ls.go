@@ -51,13 +51,13 @@ func executeCmd(inputCmd string) (s string, err error) {
 	//waiting for command to finish
 	err = cmd.Wait()
 	if err != nil {
-		fmt.Println(".....")
+		return "The value you enter isn't valid! Please, enter a valid command!", err
 	}
 
-	return "", nil
+	return
 }
 
-func readOutput(reader io.Reader, prefix string) {
+func readOutput(reader io.Reader, prefix string) (string, error) {
 	rdr := bufio.NewReader(reader)
 	bs := []byte{}
 	for {
@@ -70,6 +70,18 @@ func readOutput(reader io.Reader, prefix string) {
 			break
 		}
 	}
+	return "", nil
+}
+
+func verifyOutExecuteCmd(input string) (string, error) {
+	out, err := executeCmd(input)
+	if out == "" {
+		return "", nil
+	}
+	if err != nil {
+		fmt.Println(".....")
+	}
+	return "", nil
 }
 
 func main() {
@@ -77,12 +89,6 @@ func main() {
 	args := os.Args
 	input := args[1]
 
-	out, err := executeCmd(input)
-	if out == "" {
-		return
-	}
-	if err != nil {
-		fmt.Println(".....")
-	}
+	verifyOutExecuteCmd(input)
 
 }
