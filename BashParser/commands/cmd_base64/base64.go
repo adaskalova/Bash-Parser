@@ -8,16 +8,6 @@ import (
 	"os/exec"
 )
 
-const (
-	colPurple = "\033[35m"
-	colNone   = "\033[0m"
-	colRed    = "\033[0;31m"
-)
-
-func changeColor(s string) string {
-	return colPurple + s + colNone
-}
-
 func executeCmd(inputCmd string) (s string, err error) {
 
 	cmd := exec.Command("bash", "-c", inputCmd)
@@ -58,9 +48,7 @@ func readOutput(reader io.Reader, prefix string) (string, error) {
 		bs, _, _ = rdr.ReadLine()
 		if bs != nil {
 			outStr := string(bs)
-			coloredTxt := changeColor(outStr)
-			fmt.Println(coloredTxt)
-			return "", nil
+			fmt.Println(outStr)
 		} else {
 			break
 		}
@@ -76,7 +64,7 @@ func verifyOutExecuteCmd(input string) (string, error) {
 	if err != nil {
 		fmt.Println(".....")
 	}
-	return out, nil
+	return "", nil
 }
 
 func main() {
