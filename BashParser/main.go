@@ -242,7 +242,7 @@ func execute() {
 
 	flag.StringVar(&cmd, "cmd", "", "Please, specify command.")
 	flag.Parse()
-	fmt.Println(cmd)
+
 	if len(cmd) == 0 {
 		fmt.Println("Usage: ProgramName -cmd")
 		flag.PrintDefaults()

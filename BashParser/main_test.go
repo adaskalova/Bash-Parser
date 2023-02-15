@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -159,4 +160,149 @@ func BenchmarkChangeColor(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		changeColor(str)
 	}
+}
+
+func TestIsMatchWhiteSpace(t *testing.T) {
+	tests := []struct {
+		desc     string
+		input    string
+		expected bool
+	}{
+		{desc: "isMatchWhiteSpace_a", input: "/ abc", expected: true},
+		{desc: "isMatchWhiteSpace_b", input: "/abc", expected: false},
+		{desc: "isMatchWhiteSpace_c", input: "/", expected: false},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.desc, func(t *testing.T) {
+			output := isMatchWhiteSpace(tc.input)
+			if output != tc.expected {
+				t.Fatalf("output:  %v; expected:  %v", output, tc.expected)
+			} else {
+				t.Logf("Success !")
+			}
+		})
+	}
+}
+
+func TestChangeDir(t *testing.T) {
+	tests := []struct {
+		desc     string
+		input    string
+		expected string
+	}{
+		{desc: "changeDir_a", input: "cd /", expected: "/"},
+		{desc: "changeDir_b", input: "cd /tmp", expected: "/tmp"},
+		{desc: "changeDir_c", input: `cd \`, expected: ""},
+		{desc: "changeDir_d", input: `cd \tmp`, expected: ""},
+		{desc: "changeDir_e", input: "cd / tmp", expected: ""},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.desc, func(t *testing.T) {
+			output := changeDir(tc.input)
+			if output != tc.expected {
+				t.Fatalf("output:  %v; expected:  %v", output, tc.expected)
+			} else {
+				t.Logf("Success !")
+			}
+		})
+	}
+}
+
+func TestExecuteCommand(t *testing.T) {
+	tests := []struct {
+		desc      string
+		input     string
+		input_arg string
+		expected  string
+	}{
+		{desc: "executeCmd_a", input: "commands/cmd_cat/cat", input_arg: "cat commands/test_files/abc.txt", expected: "abcdefg"},
+		{desc: "executeCmd_b", input: "commands/cmd_sort/sort", input_arg: "sort commands/test_files/abc.txt", expected: "abcdefg"},
+		{desc: "executeCmd_d", input: "commands/cmd_tail/tail", input_arg: "tail commands/test_files/abc.txt", expected: "abcdefg"},
+		{desc: "executeCmd_e", input: "commands/cmd_ls/ls", input_arg: "ls commands/test_files/", expected: "Output: abc.txt\nOutput: computer.txt\nOutput: misc.txt\nOutput: monitor.txt\nOutput: test\nOutput: wiki_apple.txt"},
+		{desc: "executeCmd_f", input: "commands/cmd_cd/mv", input_arg: "mv commands/test_files/abc.txt commands/test_files/test", expected: "....."},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.desc, func(t *testing.T) {
+			output := executeCommand(tc.input, tc.input_arg)
+			fmt.Println(output)
+			ch := output != tc.expected
+			if !ch {
+				t.Fatalf("output:  %v; expected:  %v", output, tc.expected)
+			} else {
+				t.Logf("Success !")
+			}
+		})
+	}
+
+}
+
+func TestIsEmpty(t *testing.T) {
+	tests := []struct {
+		//test description
+		desc string
+		//function input
+		input string
+		//expected output
+		expected bool
+	}{
+		// Non Empty string
+		{desc: "TestIsEmpty", input: "P4bXBgNDrD", expected: false},
+		{desc: "TestIsEmpty", input: " \t\n P4bXBgNDrD \n\t\r\n", expected: false},
+		{desc: "TestIsEmpty", input: "$$  $$", expected: false},
+		{desc: "TestIsEmpty", input: "0", expected: false},
+		// Empty string
+		{desc: "TestIsEmpty", input: "", expected: true},
+		// string with whitespace
+		{desc: "TestIsEmpty", input: "    ", expected: true},
+		{desc: "TestIsEmpty", input: " \t\n  \n\t\r\n", expected: true},
+	}
+
+	for _, tc := range tests {
+		//result for each test case
+		t.Run(tc.desc, func(t *testing.T) {
+			output := isEmpty(tc.input)
+			if output != tc.expected {
+				t.Fatalf("output:  %v; expected:  %v", output, tc.expected)
+			} else {
+				t.Logf("Success !")
+			}
+		})
+	}
+}
+
+func TestIsPathExists(t *testing.T) {
+	tests := []struct {
+		desc     string
+		input    string
+		expected bool
+	}{
+		{desc: "isPathExists_a", input: "/", expected: true},
+		{desc: "isPathExists_b", input: "path/to/the/file.txt", expected: true},
+		{desc: "isPathExists_c", input: "At4QHT1M8nIucRlugXzt", expected: false},
+		{desc: "isPathExists_d", input: `path\to\the\file.txt`, expected: false},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.desc, func(t *testing.T) {
+			output := isPathExists(tc.input)
+			if output != tc.expected {
+				t.Fatalf("output:  %v; expected:  %v", output, tc.expected)
+			} else {
+				t.Logf("Success !")
+			}
+		})
+	}
+}
+
+func TestChangeColor(t *testing.T) {
+	str := "This is a test string."
+	expected := "\033[35mThis is a test string.\033[0m"
+	output := changeColor(str)
+	if output != expected {
+		t.Fatalf("output: %v expected: %v", output, expected)
+	}
+
 }
