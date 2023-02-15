@@ -212,16 +212,16 @@ func TestChangeDir(t *testing.T) {
 
 func TestExecuteCommand(t *testing.T) {
 	tests := []struct {
-		desc      string
-		input     string
-		input_arg string
-		expected  string
+		desc     string
+		input    string
+		inputArg string
+		expected string
 	}{
-		{desc: "executeCmd_a", input: "commands/cmd_cat/cat", input_arg: "cat commands/test_files/abc.txt", expected: "abcdefg"},
-		{desc: "executeCmd_b", input: "commands/cmd_sort/sort", input_arg: "sort commands/test_files/abc.txt", expected: "abcdefg"},
-		{desc: "executeCmd_d", input: "commands/cmd_tail/tail", input_arg: "tail commands/test_files/abc.txt", expected: "abcdefg"},
-		{desc: "executeCmd_e", input: "commands/cmd_ls/ls", input_arg: "ls commands/test_files/", expected: "Output: abc.txt\nOutput: computer.txt\nOutput: misc.txt\nOutput: monitor.txt\nOutput: test\nOutput: wiki_apple.txt"},
-		{desc: "executeCmd_f", input: "commands/cmd_cd/mv", input_arg: "mv commands/test_files/abc.txt commands/test_files/test", expected: "....."},
+		{desc: "executeCmd_a", input: "commands/cmd_cat/cat", inputArg: "cat commands/test_files/abc.txt", expected: "abcdefg"},
+		{desc: "executeCmd_b", input: "commands/cmd_sort/sort", inputArg: "sort commands/test_files/abc.txt", expected: "abcdefg"},
+		{desc: "executeCmd_d", input: "commands/cmd_tail/tail", inputArg: "tail commands/test_files/abc.txt", expected: "abcdefg"},
+		{desc: "executeCmd_e", input: "commands/cmd_ls/ls", inputArg: "ls commands/test_files/", expected: "Output: abc.txt\nOutput: computer.txt\nOutput: misc.txt\nOutput: monitor.txt\nOutput: test\nOutput: wiki_apple.txt"},
+		{desc: "executeCmd_f", input: "commands/cmd_cd/mv", inputArg: "mv commands/test_files/abc.txt commands/test_files/test", expected: "....."},
 	}
 
 	for _, tc := range tests {
