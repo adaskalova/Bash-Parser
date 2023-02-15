@@ -26,12 +26,17 @@ var (
 	bFlag     bool
 )
 
+//change the color of the output text
 func changeColor(s string) string {
 	return colPurple + s + colNone
 }
 
+//run the executable file
 func executeCommand(path string, arg string) (result string) {
-	exe, _ := exec.LookPath(path)
+	exe, err := exec.LookPath(path)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 	output, err := exec.Command(exe, arg).Output()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -40,16 +45,20 @@ func executeCommand(path string, arg string) (result string) {
 	return string(output)
 
 }
+
+//check whether the string contains slash
 func isPathExists(path string) bool {
 	result := regexp.MustCompile(pathExists).MatchString(path)
 	return result
 }
 
+//check for whitespace in file path
 func isMatchWhiteSpace(str string) bool {
 	result := regexp.MustCompile(matchWhiteSpace).MatchString(str)
 	return result
 }
 
+//change the current working directory to the user-entered directory
 func changeDir(str string) (msg string) {
 	bSpace = isMatchWhiteSpace(str)
 	if bSpace {
@@ -77,6 +86,7 @@ func changeDir(str string) (msg string) {
 	return tmpMsg
 }
 
+// check for empty string
 func isEmpty(str string) bool {
 	if strings.TrimSpace(str) == "" {
 		// if string is empty
@@ -87,6 +97,8 @@ func isEmpty(str string) bool {
 	return bFlag
 }
 
+//checks if the command begins with a specified prefix
+//and executes it
 func selectCmd(cmd string) {
 	baseTmp := isContainStr(cmd, "base64")
 	baseDecode := isContainStr(cmd, "base64 --decode")
@@ -145,7 +157,7 @@ func selectCmd(cmd string) {
 	}
 }
 
-// check file exists
+// check if file exists
 func checkFileExists(fname string) bool {
 	info, err := os.Stat(fname)
 	if os.IsNotExist(err) {
@@ -154,11 +166,13 @@ func checkFileExists(fname string) bool {
 	return !info.IsDir()
 }
 
+//check if the string is present or not in the command
 func isContainStr(str string, spec string) bool {
 	output := strings.ContainsAny(str, spec)
 	return output
 }
 
+//get file path
 func getPath(str []string) string {
 	for _, value := range str {
 		fInfo = checkFileExists(value)
@@ -170,6 +184,7 @@ func getPath(str []string) string {
 	return ""
 }
 
+//constructing a command
 func constructCommand(sl string, m map[int]string) string {
 	//find the length of map
 	var result int = len(m)
@@ -199,27 +214,20 @@ func constructCommand(sl string, m map[int]string) string {
 
 }
 
+//command parsing
 func parseCommand(cmd string) {
 	var output string
 	cmds := make(map[string]string)
 	strCmd := make(map[int]string)
 	strReplace := strings.Replace(cmd, "'", ".", -1)
 	v := strings.Split(strReplace, "|")
-	// fmt.Println("value1 = ", v)
 	for i, val := range v {
-		// fmt.Println("value2 = ", val)
 		cmds[val] = strconv.Itoa(i)
-		// fmt.Println(cmds)
 		words := strings.Fields(string(val))
-		// fmt.Println("words = ", words)
 		path := getPath(words)
-		// fmt.Println("key: ", key)
-		// fmt.Println("path: ", path)
 		if path != "" {
 			strCmd[i] = path
 		}
-		// fmt.Println("cmds: ", strCmd)
-		// fmt.Println("value2 = ", val)
 		output = constructCommand(val, strCmd)
 		colorOutput := changeColor(output)
 		fmt.Println("Command Used: ", colorOutput)
@@ -228,12 +236,13 @@ func parseCommand(cmd string) {
 	}
 }
 
+//take the user input from the command-line
 func execute() {
 	var cmd string
 
 	flag.StringVar(&cmd, "cmd", "", "Please, specify command.")
 	flag.Parse()
-
+	fmt.Println(cmd)
 	if len(cmd) == 0 {
 		fmt.Println("Usage: ProgramName -cmd")
 		flag.PrintDefaults()
