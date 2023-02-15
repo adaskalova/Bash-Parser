@@ -1,6 +1,9 @@
 
 
- go run main.go    ->  Command Used:  cat commands/default/default.txt
+ go run main.go  
+        -Usage: ProgramName -cmd
+            -cmd string
+                Please, specify command.
  
  
 ---------- TEST cat ---------------------------
