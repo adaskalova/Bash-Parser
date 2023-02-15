@@ -226,7 +226,7 @@ func TestExecuteCommand(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			output := executeCommand(tc.input, tc.input_arg)
+			output := executeCommand(tc.input, tc.inputArg)
 			fmt.Println(output)
 			ch := output != tc.expected
 			if !ch {
