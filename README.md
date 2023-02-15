@@ -38,16 +38,3 @@ The following commands can be executed:
 `$ BashParser -cmd "sort /tmp/test_files/<filename>.txt"`  
 `$ BashParser -cmd "tail /tmp/test_files/<filename>.txt"`  
 `$ BashParser -cmd "mv /tmp/test_files/<filename>.txt /tmp/test_files/test"`  
-
-
-
-
-
-
-
-
-
-
-
-
-

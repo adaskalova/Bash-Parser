@@ -1,0 +1,74 @@
+
+
+ go run main.go  
+        -Usage: ProgramName -cmd
+            -cmd string
+                Please, specify command.
+ 
+ 
+---------- TEST cat ---------------------------
+cat  filename
+
+go run main.go -cmd "cat commands/test_files/misc.txt" 
+go run main.go -cmd "cat commands/test_files/computer.txt"
+
+---------------------
+
+---------- TEST grep ---------------------------
+grep pattern file[s]
+
+go run main.go -cmd "grep Apple's commands/test_files/wiki_apple.txt"
+go run main.go -cmd "grep an commands/test_files/*.*"  
+go run main.go -cmd "grep Apple's commands/test_files/*.*" 
+
+---------------------
+
+---------- TEST rm ---------------------------
+rm file
+
+go run main.go -cmd  "rm commands/test_files/test/rm_file.txt"
+
+---------------------
+
+---------- TEST mv ---------------------------
+mv source_file target_directory
+
+go run main.go -cmd "mv commands/test_files/misc.txt commands/test_files/test"
+go run main.go -cmd "mv commands/test_files/test/misc.txt commands/test_files"
+
+---------------------
+
+---------- TEST ls ---------------------------
+ls dir
+
+go run main.go -cmd "ls commands/test_files"
+go run main.go -cmd "ls -la commands/test_files"
+
+---------------------
+
+---------- TEST cd ---------------------------
+cd dir
+
+go run main.go -cmd "cd /"
+go run main.go -cmd "cd /tmp"
+
+---------------------
+
+---------- TEST tail ---------------------------
+tail file   - display only the last 10 lines of the file
+
+go run main.go -cmd "tail commands/test_files/misc.txt"
+
+---------------------
+
+---------- TEST sort ---------------------------
+sort file 
+
+go run main.go -cmd  "sort commands/test_files/misc.txt"
+
+---------------------
+
+
+go run main.go -cmd "cat commands/test_files/misc.txt | base64 | base64 --decode"
+go run main.go -cmd "cat commands/test_files/misc.txt|sort"
+go run main.go -cmd "cat commands/test_files/misc.txt | sort | grep nux | tail"
