@@ -1,10 +1,8 @@
 package main
 
 import (
-	"bufio"
 	"flag"
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -21,10 +19,6 @@ const (
 	matchWhiteSpace = `[\/]\s+`
 )
 
-func changeColor(s string) string {
-	return colPurple + s + colNone
-}
-
 var (
 	cmtOutput string
 	fInfo     bool
@@ -32,25 +26,12 @@ var (
 	bFlag     bool
 )
 
-func readOutput(reader io.Reader, prefix string) {
-	rdr := bufio.NewReader(reader)
-	// result := ""
-	bs := []byte{}
-	for {
-		bs, _, _ = rdr.ReadLine()
-		if bs != nil {
-			outStr := string(bs)
-			fmt.Println(prefix + outStr)
-		} else {
-			break
-		}
-	}
+func changeColor(s string) string {
+	return colPurple + s + colNone
 }
 
-func run(path string, arg string) (result string) {
-
+func executeCommand(path string, arg string) (result string) {
 	exe, _ := exec.LookPath(path)
-
 	output, err := exec.Command(exe, arg).Output()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -111,17 +92,17 @@ func selectCmd(cmd string) {
 	baseDecode := isContainStr(cmd, "base64 --decode")
 	switch {
 	case strings.HasPrefix(cmd, "cat"):
-		cmtOutput = run("commands/cmd_cat/cat", cmd)
+		cmtOutput = executeCommand("commands/cmd_cat/cat", cmd)
 	case strings.HasPrefix(cmd, "sort"):
-		cmtOutput = run("commands/cmd_sort/sort", cmd)
+		cmtOutput = executeCommand("commands/cmd_sort/sort", cmd)
 	case strings.HasPrefix(cmd, "grep"):
-		cmtOutput = run("commands/cmd_grep/grep", cmd)
+		cmtOutput = executeCommand("commands/cmd_grep/grep", cmd)
 	case strings.HasPrefix(cmd, "mv"):
-		cmtOutput = run("commands/cmd_mv/mv", cmd)
+		cmtOutput = executeCommand("commands/cmd_mv/mv", cmd)
 	case strings.HasPrefix(cmd, "ls"):
-		cmtOutput = run("commands/cmd_ls/ls", cmd)
+		cmtOutput = executeCommand("commands/cmd_ls/ls", cmd)
 	case strings.HasPrefix(cmd, "tail"):
-		cmtOutput = run("commands/cmd_tail/tail", cmd)
+		cmtOutput = executeCommand("commands/cmd_tail/tail", cmd)
 	case strings.HasPrefix(cmd, "cd"):
 		cmtOutput = changeDir(cmd)
 		tmp := isEmpty(cmtOutput)
@@ -132,7 +113,7 @@ func selectCmd(cmd string) {
 			fmt.Println("The value you enter isn't valid! Please, enter a valid command!")
 		}
 	case baseTmp:
-		cmtOutput = run("commands/cmd_base64/encode", cmd)
+		cmtOutput = executeCommand("commands/cmd_base64/encode", cmd)
 		//create temp file
 		fileName := "log.txt"
 		f, err := os.Create(fileName)
@@ -151,14 +132,14 @@ func selectCmd(cmd string) {
 			panic(err)
 		}
 	case baseDecode:
-		cmtOutput = run("commands/cmd_base64_decode/base64_decode", cmd)
+		cmtOutput = executeCommand("commands/cmd_base64_decode/base64_decode", cmd)
 		//remove file
 		err := os.Remove("log.txt")
 		if err != nil {
 			fmt.Println(err)
 		}
 	case strings.HasPrefix(cmd, "rm"):
-		cmtOutput = run("commands/cmd_rm/rm", cmd)
+		cmtOutput = executeCommand("commands/cmd_rm/rm", cmd)
 	default:
 		fmt.Println("The guess is wrong!")
 	}
@@ -180,9 +161,7 @@ func isContainStr(str string, spec string) bool {
 
 func getPath(str []string) string {
 	for _, value := range str {
-		// fmt.Println("value = ", value)
 		fInfo = checkFileExists(value)
-		// fmt.Println("fInfo = ", fInfo)
 		if fInfo {
 			return value
 		}
@@ -220,7 +199,7 @@ func constructCommand(sl string, m map[int]string) string {
 
 }
 
-func cmdOptions(cmd string) {
+func parseCommand(cmd string) {
 	var output string
 	cmds := make(map[string]string)
 	strCmd := make(map[int]string)
@@ -249,12 +228,23 @@ func cmdOptions(cmd string) {
 	}
 }
 
-func main() {
-
+func execute() {
 	var cmd string
 
-	flag.StringVar(&cmd, "cmd", "cat commands/default/default.txt", "Specify command. Default is cat commands/default/default.txt")
+	flag.StringVar(&cmd, "cmd", "", "Please, specify command.")
 	flag.Parse()
 
-	cmdOptions(cmd)
+	if len(cmd) == 0 {
+		fmt.Println("Usage: ProgramName -cmd")
+		flag.PrintDefaults()
+		os.Exit(1)
+	} else {
+		parseCommand(cmd)
+	}
+
+}
+
+func main() {
+
+	execute()
 }
