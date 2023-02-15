@@ -74,6 +74,7 @@ func BenchmarkSelectCmd(b *testing.B) {
 		{"Command_mv:", "mv commands/test_files/misc.txt commands/test_files/test"},
 		{"Command_mv:", "mv commands/test_files/test/misc.txt commands/test_files"},
 		{"Command_rm:", "rm commands/test_files/test/rm_file.txt"},
+		{"Command_base64 --decode:", "base64 --decode"},
 	}
 	for _, bm := range benchmarks {
 		b.Run(bm.desc, func(b *testing.B) {
