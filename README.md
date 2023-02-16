@@ -19,8 +19,7 @@ Run it to make sure the binary has been built correctly. Execute the following c
 `$ ./BashParser`  
 
 Run the command from your `$HOME/bin` directory,where the executable file `BashParser` may be located.  
-The executable files of the individual commands must be in the same directory. This will yield the following  
-`$ BashParser`  
+The executable files of the individual commands must be in the same directory.
 
 This will yield the following:  
 `$ BashParser`   
